@@ -7,13 +7,13 @@ static void	assign_forks(t_philo *philo, t_fork *forks, int philo_position)
 	philosopher_count = philo->table->philosopher_count;
 	if (philo_position % 2 != 0)
 	{
-		philo->first_fork = &forks[philo_position];
-		philo->second_fork = &forks[(philo_position + 1) % philosopher_count];
+		philo->left_fork = &forks[philo_position];
+		philo->right_fork = &forks[(philo_position + 1) % philosopher_count];
 	}
 	else
 	{
-		philo->first_fork = &forks[(philo_position + 1) % philosopher_count];
-		philo->second_fork = &forks[philo_position];
+		philo->left_fork = &forks[(philo_position + 1) % philosopher_count];
+		philo->right_fork = &forks[philo_position];
 	}
 }
 

@@ -4,9 +4,9 @@ void	stagger_start(t_philo *philo);
 
 void	philo_eat(t_philo *philo)
 {
-	mutex_op(&philo->first_fork->mutex, LOCK);
+	mutex_op(&philo->left_fork->mutex, LOCK);
 	print_status(TAKE_FIRST_FORK, philo);
-	mutex_op(&philo->second_fork->mutex, LOCK);
+	mutex_op(&philo->right_fork->mutex, LOCK);
 	print_status(TAKE_SECOND_FORK, philo);
 	set_long(&philo->philo_mutex, &philo->last_meal_time, get_time(MILLISECOND));
 	mutex_op(&philo->philo_mutex, LOCK);
@@ -17,8 +17,8 @@ void	philo_eat(t_philo *philo)
 	if (philo->table->meal_limit > 0
 		&& philo->meal_count == philo->table->meal_limit)
 		set_bool(&philo->philo_mutex, &philo->full, true);
-	mutex_op(&philo->first_fork->mutex, UNLOCK);
-	mutex_op(&philo->second_fork->mutex, UNLOCK);
+	mutex_op(&philo->left_fork->mutex, UNLOCK);
+	mutex_op(&philo->right_fork->mutex, UNLOCK);
 }
 
 void	*philo_routine(void *data)
@@ -53,10 +53,10 @@ void	*single_philo_routine(void *arg)
 		get_time(MILLISECOND));
 	increment_long(&philo->table->table_mutex,
 		&philo->table->running_thread_count);
-	mutex_op(&philo->first_fork->mutex, LOCK);
+	mutex_op(&philo->left_fork->mutex, LOCK);
 	print_status(TAKE_FIRST_FORK, philo);
 	precise_usleep(philo->table->time_to_die, philo->table);
-	mutex_op(&philo->first_fork->mutex, UNLOCK);
+	mutex_op(&philo->left_fork->mutex, UNLOCK);
 	return (NULL);
 }
 
