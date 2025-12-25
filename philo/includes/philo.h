@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   philo.h                                            :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: weiyang <marvin@42.fr>                     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/20 12:33:38 by weiyang           #+#    #+#             */
-/*   Updated: 2025/12/25 00:00:00 by weiyang          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
@@ -22,10 +11,6 @@
 # include <sys/time.h>
 # include <sys/types.h>
 # include <unistd.h>
-
-# define RST	"\033[0m"
-# define RED	"\033[1;31m"
-# define GREEN	"\033[1;32m"
 
 typedef enum e_opcode
 {
@@ -120,5 +105,7 @@ void	clean(t_table *table);
 void	think(t_philo *philo, bool pre_simulation);
 void	eat(t_philo *philo);
 void	desynchronise(t_philo *philo);
+void	*dinner_simulation(void *data);
+void	*lone_philo(void *arg);
 
 #endif

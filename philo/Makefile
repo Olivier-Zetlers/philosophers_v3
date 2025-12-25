@@ -1,31 +1,35 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: weiyang <marvin@42.fr>                     +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/05/06 08:55:57 by weiyang           #+#    #+#              #
-#    Updated: 2025/12/25 00:00:00 by weiyang          ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
-
 NAME = philo
-FLAG = -Wall -Wextra -Werror
-SRC = philo.c
 
-OBJ = $(SRC:.c=.o)
+CC = cc
+CFLAGS = -Wall -Wextra -Werror
+INCLUDES = -I includes
+
+SRC_DIR = srcs
+OBJ_DIR = obj
+
+SRC =	main.c \
+		dinner.c \
+		monitor.c \
+		init.c \
+		parsing.c \
+		time.c \
+		sync.c \
+		safe_wrappers.c \
+		getters_setters.c
+
+OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	cc $(FLAG) -pthread $(OBJ) -o $(NAME)
+	$(CC) $(CFLAGS) -pthread $(OBJ) -o $(NAME)
 
-%.o: %.c philo.h
-	cc $(FLAG) -c $< -o $@
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c includes/philo.h
+	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
-	rm -f $(OBJ)
+	rm -rf $(OBJ_DIR)
 
 fclean: clean
 	rm -f $(NAME)
