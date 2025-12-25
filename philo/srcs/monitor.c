@@ -30,7 +30,7 @@ bool	philo_died(t_philo *philo)
 
 void	philo_die(t_table *table, t_philo *philo)
 {
-	write_status(DIED, philo, DEBUG_MODE);
+	write_status(DIED, philo);
 	set_bool(&table->table_mutex, &table->end_simulation, true);
 }
 
@@ -43,7 +43,7 @@ void	*monitor_dinner(void *data)
 	table = (t_table *)data;
 	while (!all_threads_running(&table->table_mutex,
 			&table->thread_running_nbr, table->philo_nbr))
-			;
+		;
 	while (!simulation_finished(table))
 	{
 		all_full = true;
@@ -54,7 +54,7 @@ void	*monitor_dinner(void *data)
 				philo_die(table, &table->philos[i]);
 			if (!get_bool(&table->philos[i].philo_mutex,
 					&table->philos[i].full))
-						all_full = false;
+				all_full = false;
 			i++;
 		}
 		if (table->nbr_limit_meals > 0 && all_full)

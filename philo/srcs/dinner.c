@@ -27,7 +27,7 @@ void	*dinner_simulation(void *data)
 		if (philo->full)
 			break ;
 		eat(philo);
-		write_status(SLEEPING, philo, DEBUG_MODE);
+		write_status(SLEEPING, philo);
 		precise_usleep(philo->table->time_to_sleep, philo->table);
 		think(philo, false);
 	}
@@ -45,7 +45,7 @@ void	*lone_philo(void *arg)
 	increase_long(&philo->table->table_mutex,
 		&philo->table->thread_running_nbr);
 	safe_mutex_handle(&philo->first_fork->fork, LOCK);
-	write_status(TAKE_FIRST_FORK, philo, DEBUG_MODE);
+	write_status(TAKE_FIRST_FORK, philo);
 	precise_usleep(philo->table->time_to_die, philo->table);
 	safe_mutex_handle(&philo->first_fork->fork, UNLOCK);
 	return (NULL);

@@ -12,25 +12,22 @@
 
 NAME = philo
 FLAG = -Wall -Wextra -Werror
-PATH_SRC = ./
-SRC = dinner.c getter_setter.c init.c main.c  monitor.c parse.c \
+PATH_SRC = srcs/
+SRC = dinner.c getter_setter.c init.c main.c monitor.c parse.c \
       synchro_utils.c utils.c wrapper_safe.c write.c actions.c
 
-
-OBJ = $(SRC:.c=.o)
-PATH_HEADER = ./
+OBJ = $(addprefix $(PATH_SRC), $(SRC:.c=.o))
+PATH_HEADER = includes/
 
 all: $(NAME)
 
-
 $(NAME): $(OBJ)
-	cc -Wall -Wextra -Werror -pthread $(OBJ) -I./ -o $(NAME)
-
+	cc -Wall -Wextra -Werror -pthread $(OBJ) -I$(PATH_HEADER) -o $(NAME)
 
 $(PATH_SRC)%.o: $(PATH_SRC)%.c
-	cc $(FLAG) -I$(PATH_HEADER) -c $< -o $@ 
+	cc $(FLAG) -I$(PATH_HEADER) -c $< -o $@
 
-clean: 
+clean:
 	rm -f $(OBJ)
 
 fclean: clean

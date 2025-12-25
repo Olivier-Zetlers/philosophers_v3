@@ -24,26 +24,11 @@
 # include <sys/time.h>
 
 /*
-** ANSI color codes for terminal output (used only in debug mode)
+** ANSI color codes for terminal output (used in error messages)
 */
 # define RST	"\033[0m"
 # define RED	"\033[1;31m"
 # define G		"\033[1;32m"
-# define Y		"\033[1;33m"
-# define B		"\033[1;34m"
-# define M		"\033[1;35m"
-# define C		"\033[1;36m"
-# define W		"\033[1;37m"
-
-/*
-** DEBUG_MODE: Controls output verbosity
-**   0 = Standard output (conforms to project specifications)
-**   1 = Debug output (verbose, with colors and extra info)
-**
-** IMPORTANT: Set to 0 for submission to ensure output matches
-**            the required format: "timestamp_in_ms X <action>"
-*/
-# define DEBUG_MODE	0
 
 typedef enum e_opcode
 {
@@ -130,7 +115,7 @@ void	dinner_start(t_table *table);
 void	wait_all_threads(t_table *table);
 long	gettime(t_time_code time_code);
 void	precise_usleep(long usec, t_table *table);
-void	write_status(t_philo_status status, t_philo *philo, bool debug);
+void	write_status(t_philo_status status, t_philo *philo);
 bool	all_threads_running(t_mtx *mutex, long *threads, long philo_nbr);
 void	increase_long(t_mtx *mutex, long *value);
 void	*monitor_dinner(void *data);
