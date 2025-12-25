@@ -61,23 +61,23 @@ typedef struct s_philo
 	t_table		*table;
 }	t_philo;
 
-struct	s_table
+typedef struct s_table
 {
+	bool		all_threads_ready;
+	bool		end_simulation;
+	t_fork		*forks;
+	long		meal_limit;
+	pthread_t	monitor;
 	long		philosopher_count;
+	t_philo		*philos;
+	long		running_thread_count;
+	long		start_simulation;
+	t_mutex		table_mutex;
 	long		time_to_die;
 	long		time_to_eat;
 	long		time_to_sleep;
-	long		meal_limit;
-	long		start_simulation;
-	bool		end_simulation;
-	bool		all_threads_ready;
-	t_mutex		table_mutex;
 	t_mutex		write_mutex;
-	t_fork		*forks;
-	t_philo		*philos;
-	pthread_t	monitor;
-	long		running_thread_count;
-};
+}	t_table;
 
 bool	all_threads_running(t_mutex *mutex, long *thread_count,
 			long philosopher_count);
