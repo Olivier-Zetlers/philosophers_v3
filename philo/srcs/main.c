@@ -1,12 +1,10 @@
 #include "philo.h"
 
 static void	spawn_philo_threads(t_table *table);
+static void	join_philo_threads(t_table *table);
 
 void	dinner_start(t_table *table)
 {
-	int	i;
-
-	i = 0;
 	if (table->meal_limit == 0)
 		return ;
 	if (table->philosopher_count == 1)
@@ -17,14 +15,21 @@ void	dinner_start(t_table *table)
 	table->start_simulation = get_time(MILLISECOND);
 	set_bool(&table->table_mutex, &table->all_threads_ready, true);
 	thread_op(&table->monitor, monitor_dinner, table, CREATE);
+	join_philo_threads(table);
+	thread_op(&table->monitor, NULL, NULL, JOIN);
+	set_bool(&table->table_mutex, &table->end_simulation, true);
+}
+
+static void	join_philo_threads(t_table *table)
+{
+	int	i;
+
 	i = 0;
 	while (i < table->philosopher_count)
 	{
 		thread_op(&table->philos[i].thread_id, NULL, NULL, JOIN);
 		i++;
 	}
-	thread_op(&table->monitor, NULL, NULL, JOIN);
-	set_bool(&table->table_mutex, &table->end_simulation, true);
 }
 
 int	main(int ac, char **av)

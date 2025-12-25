@@ -1,6 +1,20 @@
 #include "philo.h"
 
-void	stagger_start(t_philo *philo);
+static void	init_philo_thread(t_philo *philo);
+
+void	stagger_start(t_philo *philo)
+{
+	if (philo->table->philosopher_count % 2 == 0)
+	{
+		if (philo->id % 2 == 0)
+			precise_usleep(3e4, philo->table);
+	}
+	else
+	{
+		if (philo->id % 2)
+			philo_think(philo, true);
+	}
+}
 
 void	philo_eat(t_philo *philo)
 {
@@ -21,16 +35,21 @@ void	philo_eat(t_philo *philo)
 	mutex_op(&philo->right_fork->mutex, UNLOCK);
 }
 
-void	*philo_routine(void *data)
+static void	init_philo_thread(t_philo *philo)
 {
-	t_philo	*philo;
-
-	philo = (t_philo *)data;
 	wait_all_threads(philo->table);
 	set_long(&philo->philo_mutex, &philo->last_meal_time, get_time(MILLISECOND));
 	increment_long(&philo->table->table_mutex,
 		&philo->table->running_thread_count);
 	stagger_start(philo);
+}
+
+void	*philo_routine(void *data)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)data;
+	init_philo_thread(philo);
 	while (!simulation_finished(philo->table))
 	{
 		if (philo->full)
@@ -58,18 +77,4 @@ void	*single_philo_routine(void *arg)
 	precise_usleep(philo->table->time_to_die, philo->table);
 	mutex_op(&philo->left_fork->mutex, UNLOCK);
 	return (NULL);
-}
-
-void	stagger_start(t_philo *philo)
-{
-	if (philo->table->philosopher_count % 2 == 0)
-	{
-		if (philo->id % 2 == 0)
-			precise_usleep(3e4, philo->table);
-	}
-	else
-	{
-		if (philo->id % 2)
-			philo_think(philo, true);
-	}
 }

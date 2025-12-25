@@ -1,6 +1,7 @@
 #include "philo.h"
 
 static bool	philo_died(t_philo *philo);
+static bool	check_all_full(t_table *table);
 
 static void	announce_death(t_table *table, t_philo *philo)
 {
@@ -8,10 +9,23 @@ static void	announce_death(t_table *table, t_philo *philo)
 	set_bool(&table->table_mutex, &table->end_simulation, true);
 }
 
+static bool	check_all_full(t_table *table)
+{
+	int	i;
+
+	i = 0;
+	while (i < table->philosopher_count)
+	{
+		if (!get_bool(&table->philos[i].philo_mutex, &table->philos[i].full))
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
 void	*monitor_dinner(void *data)
 {
 	int		i;
-	bool	all_full;
 	t_table	*table;
 
 	table = (t_table *)data;
@@ -20,18 +34,14 @@ void	*monitor_dinner(void *data)
 		;
 	while (!simulation_finished(table))
 	{
-		all_full = true;
 		i = 0;
 		while (i < table->philosopher_count)
 		{
 			if (philo_died(&table->philos[i]))
 				announce_death(table, &table->philos[i]);
-			if (!get_bool(&table->philos[i].philo_mutex,
-					&table->philos[i].full))
-				all_full = false;
 			i++;
 		}
-		if (table->meal_limit > 0 && all_full)
+		if (table->meal_limit > 0 && check_all_full(table))
 			set_bool(&table->table_mutex, &table->end_simulation, true);
 	}
 	return (NULL);
