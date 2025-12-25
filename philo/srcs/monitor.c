@@ -12,7 +12,7 @@
 
 #include "philo.h"
 
-bool	philo_died(t_philo *philo)
+static bool	philo_died(t_philo *philo)
 {
 	long	escaped;
 	long	t_to_die;
@@ -28,7 +28,7 @@ bool	philo_died(t_philo *philo)
 	return (false);
 }
 
-void	philo_die(t_table *table, t_philo *philo)
+static void	philo_die(t_table *table, t_philo *philo)
 {
 	write_status(DIED, philo);
 	set_bool(&table->table_mutex, &table->end_simulation, true);

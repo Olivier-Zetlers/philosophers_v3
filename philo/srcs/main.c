@@ -27,4 +27,5 @@ int	main(int ac, char **av)
 	{
 		error_exit("Wrong input\n" G "Correct is ./philo 5 800 200 200 [5]" RST);
 	}
+	return (0);
 }

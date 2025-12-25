@@ -67,7 +67,7 @@ static void	handle_thread_error(int status, t_opcode opcode)
 	else if (status == EINVAL && (opcode == JOIN || opcode == DETACH))
 		error_exit("THe value specified by thread is not valid\n");
 	else
-		error_exit ("Opcode is incorrect");
+		error_exit("Opcode is incorrect");
 }
 
 void	safe_thread_handle(pthread_t *thread, void *(*foo)(void *),
@@ -80,6 +80,5 @@ void	safe_thread_handle(pthread_t *thread, void *(*foo)(void *),
 	else if (opcode == DETACH)
 		handle_thread_error(pthread_detach(*thread), opcode);
 	else
-		error_exit("Wrong opcode for thread handle"
-			"Use <CREATE> <JOIN><DETACH>");
+		error_exit("Wrong opcode for thread handle: Use CREATE, JOIN, DETACH");
 }

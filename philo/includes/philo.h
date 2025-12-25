@@ -13,19 +13,16 @@
 #ifndef PHILO_H
 # define PHILO_H
 
+# include <errno.h>
+# include <limits.h>
+# include <pthread.h>
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <unistd.h>
-# include <stdbool.h>
-# include <pthread.h>
-# include <sys/types.h>
-# include <limits.h>
-# include <errno.h>
 # include <sys/time.h>
+# include <sys/types.h>
+# include <unistd.h>
 
-/*
-** ANSI color codes for terminal output (used in error messages)
-*/
 # define RST	"\033[0m"
 # define RED	"\033[1;31m"
 # define G		"\033[1;32m"
@@ -65,7 +62,6 @@ typedef struct s_fork
 {
 	t_mtx	fork;
 	int		fork_id;
-
 }	t_fork;
 
 typedef struct s_philo

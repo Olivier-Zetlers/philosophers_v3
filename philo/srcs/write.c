@@ -12,15 +12,6 @@
 
 #include "philo.h"
 
-/*
-** Standard output function - conforms to project specifications.
-** Output format: "timestamp_in_ms X <action>"
-** Where:
-**   - timestamp_in_ms: milliseconds since simulation start
-**   - X: philosopher number (1-indexed)
-**   - action: one of "has taken a fork", "is eating", "is sleeping",
-**             "is thinking", or "died"
-*/
 void	write_status(t_philo_status status, t_philo *philo)
 {
 	long	elapsed;

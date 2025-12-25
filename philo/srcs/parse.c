@@ -27,6 +27,7 @@ static const char	*valide_input(const char *str)
 	const char	*start;
 	size_t		len;
 
+	len = 0;
 	while (is_space(*str))
 		str++;
 	if (*str == '+')
@@ -36,7 +37,6 @@ static const char	*valide_input(const char *str)
 	if (!is_digit(*str))
 		error_exit("Not valid input: expected digit");
 	start = str;
-	len = 0;
 	while (is_digit(*str))
 	{
 		len++;
