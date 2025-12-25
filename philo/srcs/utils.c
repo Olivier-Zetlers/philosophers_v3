@@ -32,18 +32,18 @@ long	gettime(t_time_code time_code)
 void	precise_usleep(long usec, t_table *table)
 {
 	long	start;
-	long	escaped;
-	long	rem;
+	long	elapsed;
+	long	remaining;
 
 	start = gettime(MICROSECOND);
 	while (gettime(MICROSECOND) - start < usec)
 	{
 		if (simulation_finished(table))
 			break ;
-		escaped = gettime(MICROSECOND) - start;
-		rem = usec - escaped;
-		if (rem > 1e3)
-			usleep(rem / 2);
+		elapsed = gettime(MICROSECOND) - start;
+		remaining = usec - elapsed;
+		if (remaining > 1e3)
+			usleep(remaining / 2);
 		else
 		{
 			while (gettime(MICROSECOND) - start < usec)
@@ -58,7 +58,7 @@ void	clean(t_table *table)
 	int		i;
 
 	i = 0;
-	while (i < table->philo_nbr)
+	while (i < table->philosopher_count)
 	{
 		philo = &table->philos[i];
 		safe_mutex_handle(&philo->philo_mutex, DESTROY);
@@ -78,7 +78,7 @@ void	error_exit(const char *error)
 
 void	desynchronise(t_philo *philo)
 {
-	if (philo->table->philo_nbr % 2 == 0)
+	if (philo->table->philosopher_count % 2 == 0)
 	{
 		if (philo->id % 2 == 0)
 			precise_usleep(3e4, philo->table);

@@ -40,7 +40,7 @@ static void	handle_mutex_error(int status, t_opcode opcode)
 		error_exit("Mutex is locked");
 }
 
-void	safe_mutex_handle(t_mtx *mutex, t_opcode opcode)
+void	safe_mutex_handle(t_mutex *mutex, t_opcode opcode)
 {
 	if (opcode == LOCK)
 		handle_mutex_error(pthread_mutex_lock(mutex), opcode);
@@ -70,11 +70,12 @@ static void	handle_thread_error(int status, t_opcode opcode)
 		error_exit("Opcode is incorrect");
 }
 
-void	safe_thread_handle(pthread_t *thread, void *(*foo)(void *),
+void	safe_thread_handle(pthread_t *thread, void *(*start_routine)(void *),
 		void *data, t_opcode opcode)
 {
 	if (opcode == CREATE)
-		handle_thread_error(pthread_create(thread, NULL, foo, data), opcode);
+		handle_thread_error(pthread_create(thread, NULL,
+				start_routine, data), opcode);
 	else if (opcode == JOIN)
 		handle_thread_error(pthread_join(*thread, NULL), opcode);
 	else if (opcode == DETACH)

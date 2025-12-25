@@ -18,19 +18,20 @@ void	wait_all_threads(t_table *table)
 		;
 }
 
-bool	all_threads_running(t_mtx *mutex, long *threads, long philo_nbr)
+bool	all_threads_running(t_mutex *mutex, long *thread_count,
+		long philosopher_count)
 {
 	bool	ret;
 
 	ret = false;
 	safe_mutex_handle(mutex, LOCK);
-	if (*threads == philo_nbr)
+	if (*thread_count == philosopher_count)
 		ret = true;
 	safe_mutex_handle(mutex, UNLOCK);
 	return (ret);
 }
 
-void	increase_long(t_mtx *mutex, long *value)
+void	increase_long(t_mutex *mutex, long *value)
 {
 	safe_mutex_handle(mutex, LOCK);
 	(*value)++;

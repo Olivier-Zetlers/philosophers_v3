@@ -14,37 +14,37 @@
 
 void	think(t_philo *philo, bool pre_simulation)
 {
-	long	t_eat;
-	long	t_sleep;
-	long	t_think;
+	long	time_to_eat;
+	long	time_to_sleep;
+	long	think_duration;
 
 	if (!pre_simulation)
 		write_status(THINKING, philo);
-	if (philo->table->philo_nbr % 2 == 0)
+	if (philo->table->philosopher_count % 2 == 0)
 		return ;
-	t_eat = philo->table->time_to_eat;
-	t_sleep = philo->table->time_to_sleep;
-	t_think = t_eat * 2 - t_sleep;
-	if (t_think < 0)
-		t_think = 0;
-	precise_usleep(t_think * 0.42, philo->table);
+	time_to_eat = philo->table->time_to_eat;
+	time_to_sleep = philo->table->time_to_sleep;
+	think_duration = time_to_eat * 2 - time_to_sleep;
+	if (think_duration < 0)
+		think_duration = 0;
+	precise_usleep(think_duration * 0.42, philo->table);
 }
 
 void	eat(t_philo *philo)
 {
-	safe_mutex_handle(&philo->first_fork->fork, LOCK);
+	safe_mutex_handle(&philo->first_fork->mutex, LOCK);
 	write_status(TAKE_FIRST_FORK, philo);
-	safe_mutex_handle(&philo->second_fork->fork, LOCK);
+	safe_mutex_handle(&philo->second_fork->mutex, LOCK);
 	write_status(TAKE_SECOND_FORK, philo);
 	set_long(&philo->philo_mutex, &philo->last_meal_time, gettime(MILLISECOND));
 	safe_mutex_handle(&philo->philo_mutex, LOCK);
-	philo->meals_counter++;
+	philo->meal_count++;
 	safe_mutex_handle(&philo->philo_mutex, UNLOCK);
 	write_status(EATING, philo);
 	precise_usleep(philo->table->time_to_eat, philo->table);
-	if (philo->table->nbr_limit_meals > 0
-		&& philo->meals_counter == philo->table->nbr_limit_meals)
+	if (philo->table->meal_limit > 0
+		&& philo->meal_count == philo->table->meal_limit)
 		set_bool(&philo->philo_mutex, &philo->full, true);
-	safe_mutex_handle(&philo->first_fork->fork, UNLOCK);
-	safe_mutex_handle(&philo->second_fork->fork, UNLOCK);
+	safe_mutex_handle(&philo->first_fork->mutex, UNLOCK);
+	safe_mutex_handle(&philo->second_fork->mutex, UNLOCK);
 }

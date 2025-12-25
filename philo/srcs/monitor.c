@@ -14,16 +14,16 @@
 
 static bool	philo_died(t_philo *philo)
 {
-	long	escaped;
-	long	t_to_die;
+	long	elapsed;
+	long	time_to_die_ms;
 
 	if (get_bool(&philo->philo_mutex, &philo->full))
 		return (false);
 	pthread_mutex_lock(&philo->philo_mutex);
-	escaped = gettime(MILLISECOND) - (philo->last_meal_time);
+	elapsed = gettime(MILLISECOND) - (philo->last_meal_time);
 	pthread_mutex_unlock(&philo->philo_mutex);
-	t_to_die = (philo->table->time_to_die) / 1000;
-	if (escaped > t_to_die)
+	time_to_die_ms = (philo->table->time_to_die) / 1000;
+	if (elapsed > time_to_die_ms)
 		return (true);
 	return (false);
 }
@@ -42,13 +42,13 @@ void	*monitor_dinner(void *data)
 
 	table = (t_table *)data;
 	while (!all_threads_running(&table->table_mutex,
-			&table->thread_running_nbr, table->philo_nbr))
+			&table->running_thread_count, table->philosopher_count))
 		;
 	while (!simulation_finished(table))
 	{
 		all_full = true;
 		i = 0;
-		while (i < table->philo_nbr)
+		while (i < table->philosopher_count)
 		{
 			if (philo_died(&table->philos[i]))
 				philo_die(table, &table->philos[i]);
@@ -57,7 +57,7 @@ void	*monitor_dinner(void *data)
 				all_full = false;
 			i++;
 		}
-		if (table->nbr_limit_meals > 0 && all_full)
+		if (table->meal_limit > 0 && all_full)
 			set_bool(&table->table_mutex, &table->end_simulation, true);
 	}
 	return (NULL);

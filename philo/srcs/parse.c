@@ -22,7 +22,7 @@ static bool	is_digit(char c)
 	return (c >= '0' && c <= '9');
 }
 
-static const char	*valide_input(const char *str)
+static const char	*validate_input(const char *str)
 {
 	const char	*start;
 	size_t		len;
@@ -57,7 +57,7 @@ static long	ft_atoi(const char *str)
 	int		digit;
 
 	num = 0;
-	str = valide_input(str);
+	str = validate_input(str);
 	while (is_digit(*str))
 	{
 		digit = *str - '0';
@@ -71,18 +71,18 @@ static long	ft_atoi(const char *str)
 
 void	parse_input(t_table *table, char **av)
 {
-	long	min_us;
+	long	min_time_us;
 
-	min_us = 60000;
-	table->philo_nbr = ft_atoi(av[1]);
+	min_time_us = 60000;
+	table->philosopher_count = ft_atoi(av[1]);
 	table->time_to_die = ft_atoi(av[2]) * 1000;
 	table->time_to_eat = ft_atoi(av[3]) * 1000;
 	table->time_to_sleep = ft_atoi(av[4]) * 1000;
-	if (table->time_to_die < min_us || table->time_to_eat < min_us
-		|| table->time_to_sleep < min_us)
+	if (table->time_to_die < min_time_us || table->time_to_eat < min_time_us
+		|| table->time_to_sleep < min_time_us)
 		error_exit("Use timestamps greater than 60ms");
 	if (av[5])
-		table->nbr_limit_meals = ft_atoi(av[5]);
+		table->meal_limit = ft_atoi(av[5]);
 	else
-		table->nbr_limit_meals = -1;
+		table->meal_limit = -1;
 }
