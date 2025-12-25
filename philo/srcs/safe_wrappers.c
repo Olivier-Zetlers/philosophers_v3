@@ -1,4 +1,3 @@
-
 #include "philo.h"
 
 void	*safe_malloc(size_t bytes)
@@ -7,7 +6,7 @@ void	*safe_malloc(size_t bytes)
 
 	ret = malloc(bytes);
 	if (!ret)
-		error_exit("Error with the malloc!");
+		error_exit("error: malloc failed");
 	return (ret);
 }
 
@@ -16,17 +15,17 @@ static void	handle_mutex_error(int status, t_opcode opcode)
 	if (status == 0)
 		return ;
 	if (status == EINVAL && (opcode == LOCK || opcode == UNLOCK))
-		error_exit("The value specified by mutex is invalid");
+		error_exit("error: mutex is invalid");
 	else if (status == EINVAL && opcode == INIT)
-		error_exit("The value specified by attr is invalid");
+		error_exit("error: mutex attributes invalid");
 	else if (status == EDEADLK)
-		error_exit("A deadlock would occurr");
+		error_exit("error: mutex deadlock detected");
 	else if (status == EPERM)
-		error_exit("The current thread does not hold a lock en mutex");
+		error_exit("error: mutex not owned by current thread");
 	else if (status == ENOMEM)
-		error_exit(" The process cannot allocate enough memory");
+		error_exit("error: insufficient memory for mutex");
 	else if (status == EBUSY)
-		error_exit("Mutex is locked");
+		error_exit("error: mutex is already locked");
 }
 
 void	safe_mutex_handle(t_mutex *mutex, t_opcode opcode)
@@ -40,7 +39,7 @@ void	safe_mutex_handle(t_mutex *mutex, t_opcode opcode)
 	else if (opcode == DESTROY)
 		handle_mutex_error(pthread_mutex_destroy(mutex), opcode);
 	else
-		error_exit("Opcode for mutex handle is incorrect");
+		error_exit("error: invalid mutex opcode");
 }
 
 static void	handle_thread_error(int status, t_opcode opcode)
@@ -48,15 +47,15 @@ static void	handle_thread_error(int status, t_opcode opcode)
 	if (status == 0)
 		return ;
 	else if (status == EAGAIN)
-		error_exit("No resources to create another thread\n");
+		error_exit("error: insufficient resources for thread");
 	else if (status == EPERM)
-		error_exit("The caller does not have appropriate permission\n");
+		error_exit("error: thread operation not permitted");
 	else if (status == EINVAL && opcode == CREATE)
-		error_exit("The value specifie par the attr is not valid\n");
+		error_exit("error: invalid thread attributes");
 	else if (status == EINVAL && (opcode == JOIN || opcode == DETACH))
-		error_exit("THe value specified by thread is not valid\n");
+		error_exit("error: invalid thread identifier");
 	else
-		error_exit("Opcode is incorrect");
+		error_exit("error: thread operation failed");
 }
 
 void	safe_thread_handle(pthread_t *thread, void *(*start_routine)(void *),
@@ -70,5 +69,5 @@ void	safe_thread_handle(pthread_t *thread, void *(*start_routine)(void *),
 	else if (opcode == DETACH)
 		handle_thread_error(pthread_detach(*thread), opcode);
 	else
-		error_exit("Wrong opcode for thread handle: Use CREATE, JOIN, DETACH");
+		error_exit("error: invalid thread opcode (use CREATE, JOIN, DETACH)");
 }

@@ -1,4 +1,3 @@
-
 #include "philo.h"
 
 static bool	is_space(char c)
@@ -22,9 +21,9 @@ static const char	*validate_input(const char *str)
 	if (*str == '+')
 		str++;
 	else if (*str == '-')
-		error_exit("Only non-negative values allowed");
+		error_exit("error: negative values not allowed");
 	if (!is_digit(*str))
-		error_exit("Only digits allowed");
+		error_exit("error: invalid character, expected digit");
 	start = str;
 	while (is_digit(*str))
 	{
@@ -32,11 +31,11 @@ static const char	*validate_input(const char *str)
 		str++;
 	}
 	if (len > 10)
-		error_exit("Only values less than or equal to INT_MAX allowed");
+		error_exit("error: value exceeds INT_MAX");
 	while (is_space(*str))
 		str++;
 	if (*str != '\0')
-		error_exit("Only digits allowed");
+		error_exit("error: invalid character, expected digit");
 	return (start);
 }
 
@@ -51,7 +50,7 @@ static long	ft_atoi(const char *str)
 	{
 		digit = *str - '0';
 		if (num > (INT_MAX - digit) / 10)
-			error_exit("Only values less than or equal to INT_MAX allowed");
+			error_exit("error: value exceeds INT_MAX");
 		num = num * 10 + digit;
 		str++;
 	}
@@ -69,7 +68,7 @@ void	parse_input(t_table *table, char **av)
 	table->time_to_sleep = ft_atoi(av[4]) * 1000;
 	if (table->time_to_die < min_time_us || table->time_to_eat < min_time_us
 		|| table->time_to_sleep < min_time_us)
-		error_exit("Only timestamps greater than 60ms please");
+		error_exit("error: time values must be at least 60 ms");
 	if (av[5])
 		table->meal_limit = ft_atoi(av[5]);
 	else

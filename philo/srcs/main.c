@@ -1,4 +1,3 @@
-
 #include "philo.h"
 
 static void	multi_threads(t_table *table)
@@ -52,8 +51,8 @@ int	main(int ac, char **av)
 	}
 	else
 	{
-		error_exit("Wrong input\n" 
-			"Correct is ./philo 5 800 200 200 [5]" );
+		error_exit("usage: ./philo num_philos time_to_die time_to_eat "
+			"time_to_sleep [meals]");
 	}
 	return (0);
 }
