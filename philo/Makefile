@@ -1,7 +1,7 @@
 NAME = philo
 
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror 
 INCLUDES = -I includes
 
 SRC_DIR = srcs
