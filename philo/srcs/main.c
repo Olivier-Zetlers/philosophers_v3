@@ -1,17 +1,6 @@
 #include "philo.h"
 
-static void	spawn_philo_threads(t_table *table)
-{
-	int	i;
-
-	i = 0;
-	while (i < table->philosopher_count)
-	{
-		thread_op(&table->philos[i].thread_id,
-			philo_routine, &table->philos[i], CREATE);
-		i++;
-	}
-}
+static void	spawn_philo_threads(t_table *table);
 
 void	dinner_start(t_table *table)
 {
@@ -55,4 +44,17 @@ int	main(int ac, char **av)
 			"time_to_sleep [meals]");
 	}
 	return (0);
+}
+
+static void	spawn_philo_threads(t_table *table)
+{
+	int	i;
+
+	i = 0;
+	while (i < table->philosopher_count)
+	{
+		thread_op(&table->philos[i].thread_id,
+			philo_routine, &table->philos[i], CREATE);
+		i++;
+	}
 }

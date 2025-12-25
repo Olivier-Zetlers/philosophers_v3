@@ -1,13 +1,19 @@
 #include "philo.h"
 
-void	*safe_malloc(size_t bytes)
-{
-	void	*ret;
+static void	report_mutex_error(int status, t_opcode opcode);
 
-	ret = malloc(bytes);
-	if (!ret)
-		error_exit("error: malloc failed");
-	return (ret);
+void	mutex_op(t_mutex *mutex, t_opcode opcode)
+{
+	if (opcode == LOCK)
+		report_mutex_error(pthread_mutex_lock(mutex), opcode);
+	else if (opcode == UNLOCK)
+		report_mutex_error(pthread_mutex_unlock(mutex), opcode);
+	else if (opcode == INIT)
+		report_mutex_error(pthread_mutex_init(mutex, NULL), opcode);
+	else if (opcode == DESTROY)
+		report_mutex_error(pthread_mutex_destroy(mutex), opcode);
+	else
+		error_exit("error: invalid mutex opcode");
 }
 
 static void	report_mutex_error(int status, t_opcode opcode)
@@ -28,20 +34,6 @@ static void	report_mutex_error(int status, t_opcode opcode)
 		error_exit("error: mutex is already locked");
 }
 
-void	mutex_op(t_mutex *mutex, t_opcode opcode)
-{
-	if (opcode == LOCK)
-		report_mutex_error(pthread_mutex_lock(mutex), opcode);
-	else if (opcode == UNLOCK)
-		report_mutex_error(pthread_mutex_unlock(mutex), opcode);
-	else if (opcode == INIT)
-		report_mutex_error(pthread_mutex_init(mutex, NULL), opcode);
-	else if (opcode == DESTROY)
-		report_mutex_error(pthread_mutex_destroy(mutex), opcode);
-	else
-		error_exit("error: invalid mutex opcode");
-}
-
 static void	report_thread_error(int status, t_opcode opcode)
 {
 	if (status == 0)
@@ -56,6 +48,16 @@ static void	report_thread_error(int status, t_opcode opcode)
 		error_exit("error: invalid thread identifier");
 	else
 		error_exit("error: thread operation failed");
+}
+
+void	*safe_malloc(size_t bytes)
+{
+	void	*ret;
+
+	ret = malloc(bytes);
+	if (!ret)
+		error_exit("error: malloc failed");
+	return (ret);
 }
 
 void	thread_op(pthread_t *thread, void *(*start_routine)(void *),

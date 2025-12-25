@@ -79,32 +79,32 @@ struct	s_table
 	long		running_thread_count;
 };
 
-void	error_exit(const char *error);
-void	parse_input(t_table *table, char **av);
-void	table_init(t_table *table);
-void	*safe_malloc(size_t bytes);
-void	mutex_op(t_mutex *mutex, t_opcode opcode);
-void	thread_op(pthread_t *thread, void *(*start_routine)(void *),
-			void *data, t_opcode opcode);
-void	set_bool(t_mutex *mutex, bool *dest, bool value);
-bool	get_bool(t_mutex *mutex, bool *value);
-void	set_long(t_mutex *mutex, long *dest, long value);
-long	get_long(t_mutex *mutex, long *value);
-bool	simulation_finished(t_table *table);
-void	dinner_start(t_table *table);
-void	wait_all_threads(t_table *table);
-long	get_time(t_time_code time_code);
-void	precise_usleep(long usec, t_table *table);
-void	print_status(t_philo_status status, t_philo *philo);
 bool	all_threads_running(t_mutex *mutex, long *thread_count,
 			long philosopher_count);
+void	dinner_start(t_table *table);
+void	error_exit(const char *error);
+bool	get_bool(t_mutex *mutex, bool *value);
+long	get_long(t_mutex *mutex, long *value);
+long	get_time(t_time_code time_code);
 void	increment_long(t_mutex *mutex, long *value);
 void	*monitor_dinner(void *data);
-void	table_cleanup(t_table *table);
-void	philo_think(t_philo *philo, bool pre_simulation);
+void	mutex_op(t_mutex *mutex, t_opcode opcode);
+void	parse_input(t_table *table, char **av);
 void	philo_eat(t_philo *philo);
-void	stagger_start(t_philo *philo);
 void	*philo_routine(void *data);
+void	philo_think(t_philo *philo, bool pre_simulation);
+void	precise_usleep(long usec, t_table *table);
+void	print_status(t_philo_status status, t_philo *philo);
+void	*safe_malloc(size_t bytes);
+void	set_bool(t_mutex *mutex, bool *dest, bool value);
+void	set_long(t_mutex *mutex, long *dest, long value);
+bool	simulation_finished(t_table *table);
 void	*single_philo_routine(void *arg);
+void	stagger_start(t_philo *philo);
+void	table_cleanup(t_table *table);
+void	table_init(t_table *table);
+void	thread_op(pthread_t *thread, void *(*start_routine)(void *),
+			void *data, t_opcode opcode);
+void	wait_all_threads(t_table *table);
 
 #endif

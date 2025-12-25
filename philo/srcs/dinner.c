@@ -1,5 +1,7 @@
 #include "philo.h"
 
+void	stagger_start(t_philo *philo);
+
 void	philo_eat(t_philo *philo)
 {
 	mutex_op(&philo->first_fork->mutex, LOCK);
@@ -17,20 +19,6 @@ void	philo_eat(t_philo *philo)
 		set_bool(&philo->philo_mutex, &philo->full, true);
 	mutex_op(&philo->first_fork->mutex, UNLOCK);
 	mutex_op(&philo->second_fork->mutex, UNLOCK);
-}
-
-void	stagger_start(t_philo *philo)
-{
-	if (philo->table->philosopher_count % 2 == 0)
-	{
-		if (philo->id % 2 == 0)
-			precise_usleep(3e4, philo->table);
-	}
-	else
-	{
-		if (philo->id % 2)
-			philo_think(philo, true);
-	}
 }
 
 void	*philo_routine(void *data)
@@ -70,4 +58,18 @@ void	*single_philo_routine(void *arg)
 	precise_usleep(philo->table->time_to_die, philo->table);
 	mutex_op(&philo->first_fork->mutex, UNLOCK);
 	return (NULL);
+}
+
+void	stagger_start(t_philo *philo)
+{
+	if (philo->table->philosopher_count % 2 == 0)
+	{
+		if (philo->id % 2 == 0)
+			precise_usleep(3e4, philo->table);
+	}
+	else
+	{
+		if (philo->id % 2)
+			philo_think(philo, true);
+	}
 }

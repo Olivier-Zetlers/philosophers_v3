@@ -36,27 +36,6 @@ static void	philo_init(t_table *table)
 	}
 }
 
-void	table_init(t_table *table)
-{
-	int	i;
-
-	i = 0;
-	table->end_simulation = false;
-	table->all_threads_ready = false;
-	table->running_thread_count = 0;
-	table->philos = safe_malloc(table->philosopher_count * sizeof(t_philo));
-	table->forks = safe_malloc(table->philosopher_count * sizeof(t_fork));
-	mutex_op(&table->table_mutex, INIT);
-	mutex_op(&table->write_mutex, INIT);
-	while (i < table->philosopher_count)
-	{
-		mutex_op(&table->forks[i].mutex, INIT);
-		table->forks[i].fork_id = i;
-		i++;
-	}
-	philo_init(table);
-}
-
 void	philo_think(t_philo *philo, bool pre_simulation)
 {
 	long	time_to_eat;
@@ -91,4 +70,25 @@ void	table_cleanup(t_table *table)
 	mutex_op(&table->write_mutex, DESTROY);
 	free(table->forks);
 	free(table->philos);
+}
+
+void	table_init(t_table *table)
+{
+	int	i;
+
+	i = 0;
+	table->end_simulation = false;
+	table->all_threads_ready = false;
+	table->running_thread_count = 0;
+	table->philos = safe_malloc(table->philosopher_count * sizeof(t_philo));
+	table->forks = safe_malloc(table->philosopher_count * sizeof(t_fork));
+	mutex_op(&table->table_mutex, INIT);
+	mutex_op(&table->write_mutex, INIT);
+	while (i < table->philosopher_count)
+	{
+		mutex_op(&table->forks[i].mutex, INIT);
+		table->forks[i].fork_id = i;
+		i++;
+	}
+	philo_init(table);
 }
