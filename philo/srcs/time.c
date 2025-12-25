@@ -1,6 +1,6 @@
 #include "philo.h"
 
-long	gettime(t_time_code time_code)
+long	get_time(t_time_code time_code)
 {
 	struct timeval	tv;
 
@@ -23,31 +23,31 @@ void	precise_usleep(long usec, t_table *table)
 	long	elapsed;
 	long	remaining;
 
-	start = gettime(MICROSECOND);
-	while (gettime(MICROSECOND) - start < usec)
+	start = get_time(MICROSECOND);
+	while (get_time(MICROSECOND) - start < usec)
 	{
 		if (simulation_finished(table))
 			break ;
-		elapsed = gettime(MICROSECOND) - start;
+		elapsed = get_time(MICROSECOND) - start;
 		remaining = usec - elapsed;
 		if (remaining > 1e3)
 			usleep(remaining / 2);
 		else
 		{
-			while (gettime(MICROSECOND) - start < usec)
+			while (get_time(MICROSECOND) - start < usec)
 				;
 		}
 	}
 }
 
-void	write_status(t_philo_status status, t_philo *philo)
+void	print_status(t_philo_status status, t_philo *philo)
 {
 	long	elapsed;
 
 	if (philo->full)
 		return ;
-	safe_mutex_handle(&philo->table->write_mutex, LOCK);
-	elapsed = gettime(MILLISECOND) - philo->table->start_simulation;
+	mutex_op(&philo->table->write_mutex, LOCK);
+	elapsed = get_time(MILLISECOND) - philo->table->start_simulation;
 	if ((status == TAKE_FIRST_FORK || status == TAKE_SECOND_FORK)
 		&& !simulation_finished(philo->table))
 		printf("%ld %d has taken a fork\n", elapsed, philo->id + 1);
@@ -59,5 +59,5 @@ void	write_status(t_philo_status status, t_philo *philo)
 		printf("%ld %d is thinking\n", elapsed, philo->id + 1);
 	if ((status == DIED) && !simulation_finished(philo->table))
 		printf("%ld %d died\n", elapsed, philo->id + 1);
-	safe_mutex_handle(&philo->table->write_mutex, UNLOCK);
+	mutex_op(&philo->table->write_mutex, UNLOCK);
 }

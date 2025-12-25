@@ -1,4 +1,3 @@
-
 #ifndef PHILO_H
 # define PHILO_H
 
@@ -82,10 +81,10 @@ struct	s_table
 
 void	error_exit(const char *error);
 void	parse_input(t_table *table, char **av);
-void	data_init(t_table *table);
+void	table_init(t_table *table);
 void	*safe_malloc(size_t bytes);
-void	safe_mutex_handle(t_mutex *mutex, t_opcode opcode);
-void	safe_thread_handle(pthread_t *thread, void *(*start_routine)(void *),
+void	mutex_op(t_mutex *mutex, t_opcode opcode);
+void	thread_op(pthread_t *thread, void *(*start_routine)(void *),
 			void *data, t_opcode opcode);
 void	set_bool(t_mutex *mutex, bool *dest, bool value);
 bool	get_bool(t_mutex *mutex, bool *value);
@@ -94,18 +93,18 @@ long	get_long(t_mutex *mutex, long *value);
 bool	simulation_finished(t_table *table);
 void	dinner_start(t_table *table);
 void	wait_all_threads(t_table *table);
-long	gettime(t_time_code time_code);
+long	get_time(t_time_code time_code);
 void	precise_usleep(long usec, t_table *table);
-void	write_status(t_philo_status status, t_philo *philo);
+void	print_status(t_philo_status status, t_philo *philo);
 bool	all_threads_running(t_mutex *mutex, long *thread_count,
 			long philosopher_count);
-void	increase_long(t_mutex *mutex, long *value);
+void	increment_long(t_mutex *mutex, long *value);
 void	*monitor_dinner(void *data);
-void	clean(t_table *table);
-void	think(t_philo *philo, bool pre_simulation);
-void	eat(t_philo *philo);
-void	desynchronise(t_philo *philo);
-void	*dinner_simulation(void *data);
-void	*lone_philo(void *arg);
+void	table_cleanup(t_table *table);
+void	philo_think(t_philo *philo, bool pre_simulation);
+void	philo_eat(t_philo *philo);
+void	stagger_start(t_philo *philo);
+void	*philo_routine(void *data);
+void	*single_philo_routine(void *arg);
 
 #endif

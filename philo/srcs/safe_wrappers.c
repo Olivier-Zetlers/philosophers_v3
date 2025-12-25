@@ -10,7 +10,7 @@ void	*safe_malloc(size_t bytes)
 	return (ret);
 }
 
-static void	handle_mutex_error(int status, t_opcode opcode)
+static void	report_mutex_error(int status, t_opcode opcode)
 {
 	if (status == 0)
 		return ;
@@ -28,21 +28,21 @@ static void	handle_mutex_error(int status, t_opcode opcode)
 		error_exit("error: mutex is already locked");
 }
 
-void	safe_mutex_handle(t_mutex *mutex, t_opcode opcode)
+void	mutex_op(t_mutex *mutex, t_opcode opcode)
 {
 	if (opcode == LOCK)
-		handle_mutex_error(pthread_mutex_lock(mutex), opcode);
+		report_mutex_error(pthread_mutex_lock(mutex), opcode);
 	else if (opcode == UNLOCK)
-		handle_mutex_error(pthread_mutex_unlock(mutex), opcode);
+		report_mutex_error(pthread_mutex_unlock(mutex), opcode);
 	else if (opcode == INIT)
-		handle_mutex_error(pthread_mutex_init(mutex, NULL), opcode);
+		report_mutex_error(pthread_mutex_init(mutex, NULL), opcode);
 	else if (opcode == DESTROY)
-		handle_mutex_error(pthread_mutex_destroy(mutex), opcode);
+		report_mutex_error(pthread_mutex_destroy(mutex), opcode);
 	else
 		error_exit("error: invalid mutex opcode");
 }
 
-static void	handle_thread_error(int status, t_opcode opcode)
+static void	report_thread_error(int status, t_opcode opcode)
 {
 	if (status == 0)
 		return ;
@@ -58,16 +58,16 @@ static void	handle_thread_error(int status, t_opcode opcode)
 		error_exit("error: thread operation failed");
 }
 
-void	safe_thread_handle(pthread_t *thread, void *(*start_routine)(void *),
+void	thread_op(pthread_t *thread, void *(*start_routine)(void *),
 		void *data, t_opcode opcode)
 {
 	if (opcode == CREATE)
-		handle_thread_error(pthread_create(thread, NULL,
+		report_thread_error(pthread_create(thread, NULL,
 				start_routine, data), opcode);
 	else if (opcode == JOIN)
-		handle_thread_error(pthread_join(*thread, NULL), opcode);
+		report_thread_error(pthread_join(*thread, NULL), opcode);
 	else if (opcode == DETACH)
-		handle_thread_error(pthread_detach(*thread), opcode);
+		report_thread_error(pthread_detach(*thread), opcode);
 	else
 		error_exit("error: invalid thread opcode (use CREATE, JOIN, DETACH)");
 }

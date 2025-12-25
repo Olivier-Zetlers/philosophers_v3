@@ -23,16 +23,16 @@ bool	all_threads_running(t_mutex *mutex, long *thread_count,
 	bool	ret;
 
 	ret = false;
-	safe_mutex_handle(mutex, LOCK);
+	mutex_op(mutex, LOCK);
 	if (*thread_count == philosopher_count)
 		ret = true;
-	safe_mutex_handle(mutex, UNLOCK);
+	mutex_op(mutex, UNLOCK);
 	return (ret);
 }
 
-void	increase_long(t_mutex *mutex, long *value)
+void	increment_long(t_mutex *mutex, long *value)
 {
-	safe_mutex_handle(mutex, LOCK);
+	mutex_op(mutex, LOCK);
 	(*value)++;
-	safe_mutex_handle(mutex, UNLOCK);
+	mutex_op(mutex, UNLOCK);
 }

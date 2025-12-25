@@ -1,4 +1,3 @@
-
 #include "philo.h"
 
 static void	assign_forks(t_philo *philo, t_fork *forks, int philo_position)
@@ -31,13 +30,13 @@ static void	philo_init(t_table *table)
 		philo->full = false;
 		philo->meal_count = 0;
 		philo->table = table;
-		safe_mutex_handle(&philo->philo_mutex, INIT);
+		mutex_op(&philo->philo_mutex, INIT);
 		assign_forks(philo, table->forks, i);
 		i++;
 	}
 }
 
-void	data_init(t_table *table)
+void	table_init(t_table *table)
 {
 	int	i;
 
@@ -47,25 +46,25 @@ void	data_init(t_table *table)
 	table->running_thread_count = 0;
 	table->philos = safe_malloc(table->philosopher_count * sizeof(t_philo));
 	table->forks = safe_malloc(table->philosopher_count * sizeof(t_fork));
-	safe_mutex_handle(&table->table_mutex, INIT);
-	safe_mutex_handle(&table->write_mutex, INIT);
+	mutex_op(&table->table_mutex, INIT);
+	mutex_op(&table->write_mutex, INIT);
 	while (i < table->philosopher_count)
 	{
-		safe_mutex_handle(&table->forks[i].mutex, INIT);
+		mutex_op(&table->forks[i].mutex, INIT);
 		table->forks[i].fork_id = i;
 		i++;
 	}
 	philo_init(table);
 }
 
-void	think(t_philo *philo, bool pre_simulation)
+void	philo_think(t_philo *philo, bool pre_simulation)
 {
 	long	time_to_eat;
 	long	time_to_sleep;
 	long	think_duration;
 
 	if (!pre_simulation)
-		write_status(THINKING, philo);
+		print_status(THINKING, philo);
 	if (philo->table->philosopher_count % 2 == 0)
 		return ;
 	time_to_eat = philo->table->time_to_eat;
@@ -76,7 +75,7 @@ void	think(t_philo *philo, bool pre_simulation)
 	precise_usleep(think_duration * 0.42, philo->table);
 }
 
-void	clean(t_table *table)
+void	table_cleanup(t_table *table)
 {
 	t_philo	*philo;
 	int		i;
@@ -85,11 +84,11 @@ void	clean(t_table *table)
 	while (i < table->philosopher_count)
 	{
 		philo = &table->philos[i];
-		safe_mutex_handle(&philo->philo_mutex, DESTROY);
+		mutex_op(&philo->philo_mutex, DESTROY);
 		i++;
 	}
-	safe_mutex_handle(&table->table_mutex, DESTROY);
-	safe_mutex_handle(&table->write_mutex, DESTROY);
+	mutex_op(&table->table_mutex, DESTROY);
+	mutex_op(&table->write_mutex, DESTROY);
 	free(table->forks);
 	free(table->philos);
 }
