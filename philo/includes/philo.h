@@ -6,7 +6,7 @@
 /*   By: weiyang <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 12:33:38 by weiyang           #+#    #+#             */
-/*   Updated: 2025/10/20 13:21:01 by weiyang          ###   ########.fr       */
+/*   Updated: 2025/12/25 00:00:00 by weiyang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,27 @@
 # include <errno.h>
 # include <sys/time.h>
 
+/*
+** ANSI color codes for terminal output (used only in debug mode)
+*/
 # define RST	"\033[0m"
 # define RED	"\033[1;31m"
-# define G	"\033[1;32m"
-# define Y	"\033[1;33m"
-# define B	"\033[1;34m"
-# define M	"\033[1;35m"
-# define C	"\033[1;36m"
-# define W	"\033[1;37m"
+# define G		"\033[1;32m"
+# define Y		"\033[1;33m"
+# define B		"\033[1;34m"
+# define M		"\033[1;35m"
+# define C		"\033[1;36m"
+# define W		"\033[1;37m"
 
-# define DEBUG_MODE	1
+/*
+** DEBUG_MODE: Controls output verbosity
+**   0 = Standard output (conforms to project specifications)
+**   1 = Debug output (verbose, with colors and extra info)
+**
+** IMPORTANT: Set to 0 for submission to ensure output matches
+**            the required format: "timestamp_in_ms X <action>"
+*/
+# define DEBUG_MODE	0
 
 typedef enum e_opcode
 {
@@ -127,4 +138,5 @@ void	clean(t_table *table);
 void	think(t_philo *philo, bool pre_simulation);
 void	eat(t_philo *philo);
 void	desynchronise(t_philo *philo);
+
 #endif
