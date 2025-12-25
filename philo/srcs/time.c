@@ -1,16 +1,16 @@
 #include "philo.h"
 
-long	get_time(t_time_code time_code)
+long	get_time(t_timecode timecode)
 {
 	struct timeval	tv;
 
 	if (gettimeofday(&tv, NULL))
 		error_exit("error: gettimeofday failed");
-	if (time_code == SECOND)
+	if (timecode == SECOND)
 		return (tv.tv_sec + (tv.tv_usec / 1e6));
-	else if (time_code == MILLISECOND)
+	else if (timecode == MILLISECOND)
 		return (tv.tv_sec * 1e3 + (tv.tv_usec / 1e3));
-	else if (time_code == MICROSECOND)
+	else if (timecode == MICROSECOND)
 		return (tv.tv_sec * 1e6 + tv.tv_usec);
 	else
 		error_exit("error: invalid time code");

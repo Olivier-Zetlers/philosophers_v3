@@ -22,12 +22,11 @@ typedef enum e_opcode
 	DETACH,
 }	t_opcode;
 
-typedef enum e_time_code
-{
-	SECOND,
-	MILLISECOND,
-	MICROSECOND,
-}	t_time_code;
+#define SECOND		0
+#define MILLISECOND	1
+#define MICROSECOND	2
+
+typedef int				t_timecode;
 
 typedef enum e_status
 {
@@ -85,7 +84,7 @@ void	dinner_start(t_table *table);
 void	error_exit(const char *error);
 bool	get_bool(t_mutex *mutex, bool *value);
 long	get_long(t_mutex *mutex, long *value);
-long	get_time(t_time_code time_code);
+long	get_time(t_timecode timecode);
 void	increment_long(t_mutex *mutex, long *value);
 void	*monitor_dinner(void *data);
 void	mutex_op(t_mutex *mutex, t_opcode opcode);
