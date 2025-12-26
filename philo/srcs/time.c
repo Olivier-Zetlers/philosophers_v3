@@ -46,7 +46,7 @@ void	print_status(t_philo_status status, t_philo *philo)
 
 	if (philo->full)
 		return ;
-	mutex_op(&philo->table->write_mutex, LOCK);
+	mutex_op(&philo->table->write_mutex, MTX_LOCK);
 	elapsed = get_time(MILLISECOND) - philo->table->start_simulation;
 	if ((status == TAKE_FIRST_FORK || status == TAKE_SECOND_FORK)
 		&& !simulation_finished(philo->table))
@@ -59,5 +59,5 @@ void	print_status(t_philo_status status, t_philo *philo)
 		printf("%ld %d is thinking\n", elapsed, philo->id + 1);
 	if ((status == DIED) && !simulation_finished(philo->table))
 		printf("%ld %d died\n", elapsed, philo->id + 1);
-	mutex_op(&philo->table->write_mutex, UNLOCK);
+	mutex_op(&philo->table->write_mutex, MTX_UNLOCK);
 }

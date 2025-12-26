@@ -30,7 +30,7 @@ static void	philo_init(t_table *table)
 		philo->full = false;
 		philo->meal_count = 0;
 		philo->table = table;
-		mutex_op(&philo->philo_mutex, INIT);
+		mutex_op(&philo->philo_mutex, MTX_INIT);
 		assign_forks(philo, table->forks, i);
 		i++;
 	}
@@ -63,11 +63,11 @@ void	table_cleanup(t_table *table)
 	while (i < table->philosopher_count)
 	{
 		philo = &table->philos[i];
-		mutex_op(&philo->philo_mutex, DESTROY);
+		mutex_op(&philo->philo_mutex, MTX_DESTROY);
 		i++;
 	}
-	mutex_op(&table->table_mutex, DESTROY);
-	mutex_op(&table->write_mutex, DESTROY);
+	mutex_op(&table->table_mutex, MTX_DESTROY);
+	mutex_op(&table->write_mutex, MTX_DESTROY);
 	free(table->forks);
 	free(table->philos);
 }
@@ -82,11 +82,11 @@ void	table_init(t_table *table)
 	table->running_thread_count = 0;
 	table->philos = safe_malloc(table->philosopher_count * sizeof(t_philo));
 	table->forks = safe_malloc(table->philosopher_count * sizeof(t_fork));
-	mutex_op(&table->table_mutex, INIT);
-	mutex_op(&table->write_mutex, INIT);
+	mutex_op(&table->table_mutex, MTX_INIT);
+	mutex_op(&table->write_mutex, MTX_INIT);
 	while (i < table->philosopher_count)
 	{
-		mutex_op(&table->forks[i].mutex, INIT);
+		mutex_op(&table->forks[i].mutex, MTX_INIT);
 		table->forks[i].fork_id = i;
 		i++;
 	}

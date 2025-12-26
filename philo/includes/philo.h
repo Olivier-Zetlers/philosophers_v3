@@ -11,16 +11,20 @@
 # include <sys/types.h>
 # include <unistd.h>
 
-typedef enum e_opcode
+typedef enum e_mutex_op
 {
-	LOCK,
-	UNLOCK,
-	INIT,
-	DESTROY,
-	CREATE,
-	JOIN,
-	DETACH,
-}	t_opcode;
+	MTX_LOCK,
+	MTX_UNLOCK,
+	MTX_INIT,
+	MTX_DESTROY,
+}	t_mutex_op;
+
+typedef enum e_thread_op
+{
+	THR_CREATE,
+	THR_JOIN,
+	THR_DETACH,
+}	t_thread_op;
 
 #define SECOND		0
 #define MILLISECOND	1
@@ -87,7 +91,7 @@ long	get_long(t_mutex *mutex, long *value);
 long	get_time(t_timecode timecode);
 void	increment_long(t_mutex *mutex, long *value);
 void	*monitor_dinner(void *data);
-void	mutex_op(t_mutex *mutex, t_opcode opcode);
+void	mutex_op(t_mutex *mutex, t_mutex_op op);
 void	parse_input(t_table *table, char **av);
 void	philo_eat(t_philo *philo);
 void	*philo_routine(void *data);
@@ -103,7 +107,7 @@ void	stagger_start(t_philo *philo);
 void	table_cleanup(t_table *table);
 void	table_init(t_table *table);
 void	thread_op(pthread_t *thread, void *(*start_routine)(void *),
-			void *data, t_opcode opcode);
+			void *data, t_thread_op op);
 void	wait_all_threads(t_table *table);
 
 #endif

@@ -9,14 +9,14 @@ void	dinner_start(t_table *table)
 		return ;
 	if (table->philosopher_count == 1)
 		thread_op(&table->philos[0].thread_id,
-			single_philo_routine, &table->philos[0], CREATE);
+			single_philo_routine, &table->philos[0], THR_CREATE);
 	else
 		spawn_philo_threads(table);
 	table->start_simulation = get_time(MILLISECOND);
 	set_bool(&table->table_mutex, &table->all_threads_ready, true);
-	thread_op(&table->monitor, monitor_dinner, table, CREATE);
+	thread_op(&table->monitor, monitor_dinner, table, THR_CREATE);
 	join_philo_threads(table);
-	thread_op(&table->monitor, NULL, NULL, JOIN);
+	thread_op(&table->monitor, NULL, NULL, THR_JOIN);
 	set_bool(&table->table_mutex, &table->end_simulation, true);
 }
 
@@ -27,7 +27,7 @@ static void	join_philo_threads(t_table *table)
 	i = 0;
 	while (i < table->philosopher_count)
 	{
-		thread_op(&table->philos[i].thread_id, NULL, NULL, JOIN);
+		thread_op(&table->philos[i].thread_id, NULL, NULL, THR_JOIN);
 		i++;
 	}
 }
@@ -59,7 +59,7 @@ static void	spawn_philo_threads(t_table *table)
 	while (i < table->philosopher_count)
 	{
 		thread_op(&table->philos[i].thread_id,
-			philo_routine, &table->philos[i], CREATE);
+			philo_routine, &table->philos[i], THR_CREATE);
 		i++;
 	}
 }
