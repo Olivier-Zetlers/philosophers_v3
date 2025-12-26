@@ -82,32 +82,49 @@ typedef struct s_table
 	t_mutex		write_mutex;
 }	t_table;
 
-bool	all_threads_running(t_mutex *mutex, long *thread_count,
-			long philosopher_count);
+/* main.c */
 void	dinner_start(t_table *table);
-void	error_exit(const char *error);
-bool	get_bool(t_mutex *mutex, bool *value);
-long	get_long(t_mutex *mutex, long *value);
-long	get_time(t_timecode timecode);
-void	increment_long(t_mutex *mutex, long *value);
-void	*monitor_dinner(void *data);
-void	mutex_op(t_mutex *mutex, t_mutex_op op);
-void	parse_input(t_table *table, char **av);
+
+/* dinner.c */
 void	philo_eat(t_philo *philo);
 void	*philo_routine(void *data);
-void	philo_think(t_philo *philo, bool pre_simulation);
-void	precise_usleep(long usec, t_table *table);
-void	print_status(t_philo_status status, t_philo *philo);
-void	*safe_malloc(size_t bytes);
-void	set_bool(t_mutex *mutex, bool *dest, bool value);
-void	set_long(t_mutex *mutex, long *dest, long value);
-bool	simulation_finished(t_table *table);
 void	*single_philo_routine(void *arg);
 void	stagger_start(t_philo *philo);
+
+/* monitor.c */
+void	*monitor_dinner(void *data);
+
+/* init.c */
+void	philo_think(t_philo *philo, bool pre_simulation);
 void	table_cleanup(t_table *table);
 void	table_init(t_table *table);
+
+/* parsing.c */
+void	parse_input(t_table *table, char **av);
+
+/* time.c */
+long	get_time(t_timecode timecode);
+void	precise_usleep(long usec, t_table *table);
+void	print_status(t_philo_status status, t_philo *philo);
+
+/* sync.c */
+bool	all_threads_running(t_mutex *mutex, long *thread_count,
+			long philosopher_count);
+void	error_exit(const char *error);
+void	increment_long(t_mutex *mutex, long *value);
+bool	simulation_finished(t_table *table);
+void	wait_all_threads(t_table *table);
+
+/* safe_wrappers.c */
+void	mutex_op(t_mutex *mutex, t_mutex_op op);
+void	*safe_malloc(size_t bytes);
 void	thread_op(pthread_t *thread, void *(*start_routine)(void *),
 			void *data, t_thread_op op);
-void	wait_all_threads(t_table *table);
+
+/* getters_setters.c */
+bool	get_bool(t_mutex *mutex, bool *value);
+long	get_long(t_mutex *mutex, long *value);
+void	set_bool(t_mutex *mutex, bool *dest, bool value);
+void	set_long(t_mutex *mutex, long *dest, long value);
 
 #endif
