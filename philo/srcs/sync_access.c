@@ -1,50 +1,47 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sync.c                                             :+:      :+:    :+:   */
+/*   sync_access.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ozetlers <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/12/26 03:38:49 by ozetlers          #+#    #+#             */
-/*   Updated: 2025/12/26 03:38:53 by ozetlers         ###   ########.fr       */
+/*   Created: 2025/12/26 03:38:38 by ozetlers          #+#    #+#             */
+/*   Updated: 2025/12/26 03:38:41 by ozetlers         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-bool	all_threads_running(t_mutex *mutex, long *thread_count,
-		long philosopher_count)
+bool	get_bool(t_mutex *mutex, bool *value)
 {
 	bool	ret;
 
-	ret = false;
 	mutex_op(mutex, MTX_LOCK);
-	if (*thread_count == philosopher_count)
-		ret = true;
+	ret = *value;
 	mutex_op(mutex, MTX_UNLOCK);
 	return (ret);
 }
 
-void	error_exit(const char *error)
+long	get_long(t_mutex *mutex, long *value)
 {
-	printf("%s\n", error);
-	exit(EXIT_FAILURE);
+	long	ret;
+
+	mutex_op(mutex, MTX_LOCK);
+	ret = *value;
+	mutex_op(mutex, MTX_UNLOCK);
+	return (ret);
 }
 
-void	increment_long(t_mutex *mutex, long *value)
+void	set_bool(t_mutex *mutex, bool *dest, bool value)
 {
 	mutex_op(mutex, MTX_LOCK);
-	(*value)++;
+	*dest = value;
 	mutex_op(mutex, MTX_UNLOCK);
 }
 
-bool	simulation_finished(t_table *table)
+void	set_long(t_mutex *mutex, long *dest, long value)
 {
-	return (get_bool(&table->table_mutex, &table->end_simulation));
-}
-
-void	wait_all_threads(t_table *table)
-{
-	while (!get_bool(&table->table_mutex, &table->all_threads_ready))
-		;
+	mutex_op(mutex, MTX_LOCK);
+	*dest = value;
+	mutex_op(mutex, MTX_UNLOCK);
 }

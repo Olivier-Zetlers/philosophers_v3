@@ -15,7 +15,7 @@ SRC =	main.c \
 		time.c \
 		sync.c \
 		safe_wrappers.c \
-		getters_setters.c
+		sync_access.c
 
 OBJ = $(SRC:%.c=$(OBJ_DIR)/%.o)
 

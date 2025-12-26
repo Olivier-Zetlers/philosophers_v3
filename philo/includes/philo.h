@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   philo.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ozetlers <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/26 03:39:23 by ozetlers          #+#    #+#             */
+/*   Updated: 2025/12/26 03:42:55 by ozetlers         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PHILO_H
 # define PHILO_H
 
@@ -10,6 +22,14 @@
 # include <sys/time.h>
 # include <sys/types.h>
 # include <unistd.h>
+
+# define SECOND		0
+# define MILLISECOND	1
+# define MICROSECOND	2
+
+typedef int				t_timecode;
+typedef pthread_mutex_t	t_mutex;
+typedef struct s_table	t_table;
 
 typedef enum e_mutex_op
 {
@@ -26,12 +46,6 @@ typedef enum e_thread_op
 	THR_DETACH,
 }	t_thread_op;
 
-#define SECOND		0
-#define MILLISECOND	1
-#define MICROSECOND	2
-
-typedef int				t_timecode;
-
 typedef enum e_status
 {
 	EATING,
@@ -41,9 +55,6 @@ typedef enum e_status
 	GRAB_RIGHT_FORK,
 	DIED,
 }	t_philo_status;
-
-typedef pthread_mutex_t			t_mutex;
-typedef struct s_table			t_table;
 
 typedef struct s_fork
 {
@@ -121,7 +132,7 @@ void	*safe_malloc(size_t bytes);
 void	thread_op(pthread_t *thread, void *(*start_routine)(void *),
 			void *data, t_thread_op op);
 
-/* getters_setters.c */
+/* sync_access.c */
 bool	get_bool(t_mutex *mutex, bool *value);
 long	get_long(t_mutex *mutex, long *value);
 void	set_bool(t_mutex *mutex, bool *dest, bool value);

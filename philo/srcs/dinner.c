@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dinner.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ozetlers <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/26 03:37:09 by ozetlers          #+#    #+#             */
+/*   Updated: 2025/12/26 03:44:45 by ozetlers         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "philo.h"
 
 static void	init_philo_thread(t_philo *philo);
@@ -22,7 +34,8 @@ void	philo_eat(t_philo *philo)
 	print_status(GRAB_LEFT_FORK, philo);
 	mutex_op(&philo->right_fork->mutex, MTX_LOCK);
 	print_status(GRAB_RIGHT_FORK, philo);
-	set_long(&philo->philo_mutex, &philo->last_meal_time, get_time(MILLISECOND));
+	set_long(&philo->philo_mutex, &philo->last_meal_time,
+		get_time(MILLISECOND));
 	mutex_op(&philo->philo_mutex, MTX_LOCK);
 	philo->meal_count++;
 	mutex_op(&philo->philo_mutex, MTX_UNLOCK);
@@ -38,7 +51,8 @@ void	philo_eat(t_philo *philo)
 static void	init_philo_thread(t_philo *philo)
 {
 	wait_all_threads(philo->table);
-	set_long(&philo->philo_mutex, &philo->last_meal_time, get_time(MILLISECOND));
+	set_long(&philo->philo_mutex, &philo->last_meal_time,
+		get_time(MILLISECOND));
 	increment_long(&philo->table->table_mutex,
 		&philo->table->running_thread_count);
 	stagger_start(philo);
