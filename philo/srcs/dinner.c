@@ -19,9 +19,9 @@ void	stagger_start(t_philo *philo)
 void	philo_eat(t_philo *philo)
 {
 	mutex_op(&philo->left_fork->mutex, MTX_LOCK);
-	print_status(TAKE_FIRST_FORK, philo);
+	print_status(GRAB_LEFT_FORK, philo);
 	mutex_op(&philo->right_fork->mutex, MTX_LOCK);
-	print_status(TAKE_SECOND_FORK, philo);
+	print_status(GRAB_RIGHT_FORK, philo);
 	set_long(&philo->philo_mutex, &philo->last_meal_time, get_time(MILLISECOND));
 	mutex_op(&philo->philo_mutex, MTX_LOCK);
 	philo->meal_count++;
@@ -73,7 +73,7 @@ void	*single_philo_routine(void *arg)
 	increment_long(&philo->table->table_mutex,
 		&philo->table->running_thread_count);
 	mutex_op(&philo->left_fork->mutex, MTX_LOCK);
-	print_status(TAKE_FIRST_FORK, philo);
+	print_status(GRAB_LEFT_FORK, philo);
 	precise_usleep(philo->table->time_to_die, philo->table);
 	mutex_op(&philo->left_fork->mutex, MTX_UNLOCK);
 	return (NULL);

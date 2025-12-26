@@ -37,8 +37,8 @@ typedef enum e_status
 	EATING,
 	SLEEPING,
 	THINKING,
-	TAKE_FIRST_FORK,
-	TAKE_SECOND_FORK,
+	GRAB_LEFT_FORK,
+	GRAB_RIGHT_FORK,
 	DIED,
 }	t_philo_status;
 

@@ -48,7 +48,7 @@ void	print_status(t_philo_status status, t_philo *philo)
 		return ;
 	mutex_op(&philo->table->write_mutex, MTX_LOCK);
 	elapsed = get_time(MILLISECOND) - philo->table->start_simulation;
-	if ((status == TAKE_FIRST_FORK || status == TAKE_SECOND_FORK)
+	if ((status == GRAB_LEFT_FORK || status == GRAB_RIGHT_FORK)
 		&& !simulation_finished(philo->table))
 		printf("%ld %d has taken a fork\n", elapsed, philo->id + 1);
 	if ((status == EATING) && !simulation_finished(philo->table))
